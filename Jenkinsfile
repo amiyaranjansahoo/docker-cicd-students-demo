@@ -29,8 +29,8 @@ pipeline{
 			steps{
 				withCredentials([string(credentialsId: 'docker_hub_pwd', variable: 'docker_password')]) {
 					echo "Login and pushed to Docker hub"
-					docker login -u amiyaranjansahoo -p ${docker_password}
-					docker push amiyaranjansahoo/myimg:${BUILD_NUMBER}
+					sh "docker login -u amiyaranjansahoo -p ${docker_password}"
+					sh "docker push amiyaranjansahoo/myimg:${BUILD_NUMBER}"
 }
 			}
 		}
