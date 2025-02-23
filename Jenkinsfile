@@ -1,39 +1,40 @@
-pipeline {
-    agent any
-	
+pipeline{
+	agent any
 	tools {
-		maven 'mvn3'
-    }
+		maven 'maven3'
+	}
 
-
-    stages {
-        stage('Build using maven') {
-            steps {
-                sh 'mvn clean package'
-            }
-        }
+	stages{
+		stage('Clone the code from Git'){
+			steps{
+				echo "Done from Jenkins"
+			}
+		}
 		
-		stage('Build the image') {
-            steps {
-                sh 'docker build -t amiyaranjansahoo/myimg:v1 .'
-            }
-        }
+		stage('Build using maven'){
+			steps{
+				echo "Build using maven"
+				sh 'mvn clean package'
+			}
+		}
 		
-		stage('Upload to Docker hub') {
-            steps {
-                withCredentials([string(credentialsId: 'dockerhub_passwd', variable: 'docker_passwd')]) {
-					sh "docker login -u amiyaranjansahoo -p ${docker_passwd}"
-					sh "docker push amiyaranjansahoo/myimg:v1"
-				}
-            }
-        }
+		stage('Build the docker image'){
+			steps{
+				echo "Build the docker image"
+				sh "docker build . -t amiyaranjansahoo/myimg:v1"
+			}
+		}
 		
-		stage('Deploy to dev remote server') {
-            steps {
-                sshagent(['docker-dev']) {
-					sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.46.125 docker run -itd -p 8080:8080 --name mycontainer amiyaranjansahoo/myimg:v1"
-				}
-            }
-        }
-    }
+		stage('Login and pushed to Docker hub'){
+			steps{
+				echo "Login and pushed to Docker hub"
+			}
+		}
+		
+		stage('Download the image and create the container'){
+			steps{
+				echo "Download the image and create the container"
+			}
+		}
+	}
 }
