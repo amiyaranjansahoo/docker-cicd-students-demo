@@ -38,6 +38,9 @@ pipeline{
 		stage('Download the image and create the container'){
 			steps{
 				echo "Download the image and create the container"
+				sshagent(['dockerssh']) {
+    sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.35.32 docker run -d -p 8080:8080 --name mywebapp amiyaranjansahoo/myimg:${BUILD_NUMBER}"
+}
 			}
 		}
 	}
