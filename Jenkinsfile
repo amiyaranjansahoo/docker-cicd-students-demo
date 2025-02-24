@@ -38,7 +38,7 @@ pipeline{
 			steps{
 				echo "create the container in a remote server"
 				sshagent(['dockerssh']) {
-				ssh -o StrictHostKeyChecking=no ec2-user@172.31.35.32 docker run -d -p 8080:8080 --name mycontainer amiyaranjansahoo/dockerimg0700am:${BUILD_NUMBER}
+				sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.35.32 docker run -d -p 8080:8080 --name mycontainer amiyaranjansahoo/dockerimg0700am:${BUILD_NUMBER}"
 				}
 			}
 		}
