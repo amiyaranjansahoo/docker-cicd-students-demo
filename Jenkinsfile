@@ -20,13 +20,17 @@ pipeline{
 		stage('Build the docker image'){
 			steps{
 				echo "Build the docker image"
-				sh 'docker build . -t amiyaranjansahoo/dockerimg0700am:v1'
+				sh 'docker build . -t amiyaranjansahoo/dockerimg0700am:${BUILD_NUMBER}'
 			}
 		}
 		
 		stage('Login and pushed to Docker hub'){
 			steps{
+				withCredentials([string(credentialsId: 'dockerpwd', variable: 'dockerpassword')]) {
 				echo "Login and pushed to Docker hub"
+				sh "docker login -u amiyaranjansahoo -p ${dockerpassword}"
+				sh "docker push amiyaranjansahoo/dockerimg0700am:${BUILD_NUMBER}"
+				}
 			}
 		}
 		
@@ -37,3 +41,6 @@ pipeline{
 		}
 	}
 }
+
+
+
