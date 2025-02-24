@@ -20,6 +20,7 @@ pipeline{
 		stage('Build the docker image'){
 			steps{
 				echo "Build the docker image"
+				sh 'docker build . -t amiyaranjansahoo/dockerimg0700am:v1'
 			}
 		}
 		
