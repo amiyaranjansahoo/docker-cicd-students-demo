@@ -3,11 +3,10 @@ pipeline{
 	tools {
 		maven 'maven3'
 	}
-
 	stages{
 		stage('Clone the code from Git'){
 			steps{
-				echo "Done from Jenkins"
+				echo "Its configured from Jenkins UI"
 			}
 		}
 		
@@ -21,26 +20,18 @@ pipeline{
 		stage('Build the docker image'){
 			steps{
 				echo "Build the docker image"
-				sh "docker build . -t amiyaranjansahoo/myimg:${BUILD_NUMBER}"
 			}
 		}
 		
 		stage('Login and pushed to Docker hub'){
 			steps{
-				withCredentials([string(credentialsId: 'docker_hub_pwd', variable: 'docker_password')]) {
-					echo "Login and pushed to Docker hub"
-					sh "docker login -u amiyaranjansahoo -p ${docker_password}"
-					sh "docker push amiyaranjansahoo/myimg:${BUILD_NUMBER}"
-}
+				echo "Login and pushed to Docker hub"
 			}
 		}
 		
 		stage('Download the image and create the container'){
 			steps{
 				echo "Download the image and create the container"
-				sshagent(['dockerssh']) {
-    sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.35.32 docker run -d -p 8080:8080 --name mywebapp amiyaranjansahoo/myimg:${BUILD_NUMBER}"
-}
 			}
 		}
 	}
