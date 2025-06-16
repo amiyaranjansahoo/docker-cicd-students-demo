@@ -22,20 +22,29 @@ pipeline {
 		stage('Create the image') {
             steps {
                 echo 'Create the image'
-				sh 'docker build . -t amiyaranjansahoo/javahomeimg:v1'
+				sh "docker build . -t amiyaranjansahoo/javahomeimg:${BUILD_NUMBER}"
             }
         }
 		
 		stage('Push the image to the docker registry') {
             steps {
-                echo 'Push the image to the docker registry'
+                withCredentials([string(credentialsId: 'docker_pwd', variable: 'dockerpassword')]) {
+					echo 'Push the image to the docker registry'
+					docker login -u amiyaranjansahoo -p ${docker_pwd}
+					docker push amiyaranjansahoo/javahomeimg:${BUILD_NUMBER}
+				}
             }
         }
 		
 		stage('Create the container') {
             steps {
                 echo 'Create the container'
+				docker run -d -p 9090:8080 --name mycontainer amiyaranjansahoo/javahomeimg:${BUILD_NUMBER}
             }
         }
     }
 }
+
+
+
+
