@@ -30,8 +30,8 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'docker_pwd', variable: 'dockerpassword')]) {
 					echo 'Push the image to the docker registry'
-					docker login -u amiyaranjansahoo -p ${docker_pwd}
-					docker push amiyaranjansahoo/javahomeimg:${BUILD_NUMBER}
+					sh "docker login -u amiyaranjansahoo -p ${docker_pwd}"
+					sh "docker push amiyaranjansahoo/javahomeimg:${BUILD_NUMBER}"
 				}
             }
         }
@@ -39,12 +39,8 @@ pipeline {
 		stage('Create the container') {
             steps {
                 echo 'Create the container'
-				docker run -d -p 9090:8080 --name mycontainer amiyaranjansahoo/javahomeimg:${BUILD_NUMBER}
+				sh "docker run -d -p 9090:8080 --name mycontainer amiyaranjansahoo/javahomeimg:${BUILD_NUMBER}"
             }
         }
     }
 }
-
-
-
-
