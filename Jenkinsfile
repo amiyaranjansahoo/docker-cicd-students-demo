@@ -39,7 +39,8 @@ pipeline {
 		stage('Create the container') {
             steps {
                 echo 'Create the container'
-				sh "docker run -d -p 9090:8080 --name mycontainer amiyaranjansahoo/javahomeimg:${BUILD_NUMBER}"
+		    sh "docker rm -f mycontainer"		
+		    sh "docker run -d -p 9090:8080 --name mycontainer amiyaranjansahoo/javahomeimg:${BUILD_NUMBER}"
             }
         }
     }
