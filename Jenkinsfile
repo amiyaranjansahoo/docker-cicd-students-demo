@@ -30,7 +30,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'docker_pwd', variable: 'dockerpassword')]) {
 					echo 'Push the image to the docker registry'
-					sh "docker login -u amiyaranjansahoo -p ${docker_pwd}"
+					sh "docker login -u amiyaranjansahoo -p ${dockerpassword}"
 					sh "docker push amiyaranjansahoo/javahomeimg:${BUILD_NUMBER}"
 				}
             }
