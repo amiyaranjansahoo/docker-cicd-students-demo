@@ -29,9 +29,9 @@ pipeline {
 
         stage('Push the image to the docker registry') {
             steps {
-                withCredentials([string(credentialsId: 'docker_pwd', variable: 'dockerpassword')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker_pwd', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     echo 'Push the image to the docker registry'
-                    sh "docker login -u saikiran64264 -p ${dockerpassword}"
+                    sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
                     sh "docker push saikiran64264/javahomeimg:${BUILD_NUMBER}"
                 }
             }
