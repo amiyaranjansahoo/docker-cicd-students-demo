@@ -8,7 +8,8 @@ pipeline {
     stages {
         stage('Clone the sourcecode') {
             steps {
-                echo 'Already configured'
+                echo 'Cloning the repository'
+                git url: 'https://github.com/Saikiran650/docker-cicd-students-demo.git', branch: 'main'
             }
         }
 
@@ -29,14 +30,16 @@ pipeline {
         stage('Push the image to the docker registry') {
             steps {
                 echo 'Push the image to the docker registry'
-                // Example: sh 'docker push saikiran64264/myimg2:v3'
+                // Uncomment this if credentials and Docker login are set up
+                // sh 'docker push saikiran64264/myimg2:v3'
             }
         }
 
         stage('Create the container') {
             steps {
                 echo 'Create the container'
-                // Example: sh 'docker run -d --name mycontainer saikiran64264/myimg2:v3'
+                // Uncomment and customize this if you want to run the container
+                // sh 'docker run -d --name mycontainer saikiran64264/myimg2:v3'
             }
         }
     }
