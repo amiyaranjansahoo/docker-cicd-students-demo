@@ -1,47 +1,47 @@
 pipeline {
     agent any
-	tools {
-		maven 'mvn3'
-	}
 
+    tools {
+        maven 'mvn3'
+    }
 
     stages {
         stage('Clone the sourcecode') {
             steps {
-                echo 'Already configured'
+                echo 'Cloning the repository'
+                git url: 'https://github.com/Saikiran650/docker-cicd-students-demo.git', branch: 'main'
             }
         }
-		
-		stage('Build the sourcecode using maven') {
+
+        stage('Build the sourcecode using maven') {
             steps {
                 echo 'Build the sourcecode using maven'
-				sh 'mvn clean package'
+                sh 'mvn clean package'
             }
         }
-		
-		stage('Create the image') {
+
+        stage('Create the image') {
             steps {
                 echo 'Create the image'
-				sh "docker build . -t amiyaranjansahoo/javahomeimg:${BUILD_NUMBER}"
+                sh 'docker build -t saikiran64264/myimg2:v3 .'
             }
         }
-		
-		stage('Push the image to the docker registry') {
+
+        stage('Push the image to the docker registry') {
             steps {
-                withCredentials([string(credentialsId: 'docker_pwd', variable: 'dockerpassword')]) {
-					echo 'Push the image to the docker registry'
-					sh "docker login -u amiyaranjansahoo -p ${dockerpassword}"
-					sh "docker push amiyaranjansahoo/javahomeimg:${BUILD_NUMBER}"
-				}
+                echo 'Push the image to the docker registry'
+                // Uncomment this if credentials and Docker login are set up
+                // sh 'docker push saikiran64264/myimg2:v3'
             }
         }
-		
-		stage('Create the container') {
+
+        stage('Create the container') {
             steps {
                 echo 'Create the container'
-		    sh "docker rm -f mycontainer"		
-		    sh "docker run -d -p 9090:8080 --name mycontainer amiyaranjansahoo/javahomeimg:${BUILD_NUMBER}"
+                // Uncomment and customize this if you want to run the container
+                // sh 'docker run -d --name mycontainer saikiran64264/myimg2:v3'
             }
         }
     }
-}
+} 
+
