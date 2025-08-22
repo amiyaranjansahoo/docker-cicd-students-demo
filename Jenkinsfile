@@ -23,25 +23,27 @@ pipeline {
         stage('Create the image') {
             steps {
                 echo 'Create the image'
-                sh 'docker build -t saikiran64264/myimg2:v3 .'
+                sh "docker build . -t saikiran64264/javahomeimg1:${BUILD_NUMBER}"
             }
         }
 
         stage('Push the image to the docker registry') {
             steps {
-                echo 'Push the image to the docker registry'
-                // Uncomment this if credentials and Docker login are set up
-                // sh 'docker push saikiran64264/myimg2:v3'
+               withCredentials([usernamePassword(credentialsId: 'docker_pwd', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                   sh '''
+                       echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+                       docker push saikiran64264/javahomeimg1:${BUILD_NUMBER}
+                   '''
+               }
             }
         }
 
         stage('Create the container') {
             steps {
                 echo 'Create the container'
-                // Uncomment and customize this if you want to run the container
-                // sh 'docker run -d --name mycontainer saikiran64264/myimg2:v3'
+                sh "docker rm -f mycontainer || true"
+                sh "docker run -d -p 9090:8080 --name mycontainer saikiran64264/javahomeimg1:${BUILD_NUMBER}"
             }
         }
     }
-} 
-
+}
